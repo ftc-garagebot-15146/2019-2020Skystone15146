@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "/Users/GMC/Documents/FTC_4.3/TeamCode/build/intermediates/incremental/mergeDebugResources/merged.dir/values-v14/values-v14.xml",
+            "outputFile": "/Users/GMC/Documents/FTC_GarageBot/2019-2020Skystone15146/TeamCode/build/intermediates/incremental/mergeDebugResources/merged.dir/values-v14/values-v14.xml",
             "map": [
                 {
-                    "source": "/Users/GMC/.gradle/caches/transforms-2/files-2.1/71d4f050f797b1f7d529788952792d0c/res/values-v14/values-v14.xml",
+                    "source": "/Users/GMC/.gradle/caches/transforms-2/files-2.1/f0059778060e0175ca6b0c0d91551b26/res/values-v14/values-v14.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",

@@ -106,36 +106,32 @@ public class RoverRuckusTele extends OpMode
      */
     @Override
     public void loop() {
-        // Setup a variable for each drive wheel to save power level for telemetry
+
+        //Set up POV drive
         double leftPower;
         double rightPower;
 
-        // Choose to drive using either Tank Mode, or POV Mode
-        // Comment out the method that's not used.  The default below is POV.
 
-        // POV Mode uses left stick to go forward, and right stick to turn.
-        // - This uses basic math to combine motions and is easier to drive straight.
         double drive = -gamepad1.left_stick_y;
         double turn  =  gamepad1.left_stick_x;
         leftPower    = Range.clip(drive + turn, -1.0, 1.0) ;
         rightPower   = Range.clip(drive - turn, -1.0, 1.0) ;
 
-        // Tank Mode uses one stick to control each wheel.
-        // - This requires no math, but it is hard to drive forward slowly and keep straight.
-        // leftPower  = -gamepad1.left_stick_y ;
-        // rightPower = -gamepad1.right_stick_y ;
+        leftDrive.setPower(leftPower);
+        rightDrive.setPower(rightPower);
 
-        // Send calculated power to wheels
+
+        //Gate Servo Position
         if (gamepad2.a) {
             gate.setPosition(.5);
         }
 
         if (gamepad2.b) {
             gate.setPosition(.15);
-
         }
 
 
+        //Set Continuous Rotation Servo Power
         if (gamepad2.x) {
             intake.setPower(1);
 
@@ -144,31 +140,24 @@ public class RoverRuckusTele extends OpMode
             intake.setPower(0);
         }
 
-        leftDrive.setPower(leftPower);
-        rightDrive.setPower(rightPower);
 
+        //Control Arm Tilt
         armTilt.setPower(-gamepad2.right_trigger);
         armTilt.setPower(gamepad2.left_trigger);
 
-
-
+        //Linear Slide up/down
         if (gamepad2.dpad_up) {
-
-            armExtend.setPower(-.99);
-
-        } else {
             armExtend.setPower(1);
+
+        } else if (gamepad2.dpad_down) {
+            armExtend.setPower(-1);
         }
 
-
-        if (gamepad2.dpad_down) {
-            armExtend.setPower(1);
-            //no power very little power
-
-        } else {
+        else {
             armExtend.setPower(0);
         }
 
+        //Control Lift Motor
         liftMotor.setPower(-gamepad2.left_stick_y);
 
 
@@ -177,9 +166,7 @@ public class RoverRuckusTele extends OpMode
         telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
     }
 
-    /*
-     * Code to run ONCE after the driver hits STOP
-     */
+
     @Override
     public void stop() {
     }
