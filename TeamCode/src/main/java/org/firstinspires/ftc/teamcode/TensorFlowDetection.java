@@ -41,19 +41,11 @@ import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 
 import java.util.List;
 
-/**
- * This 2018-2019 OpMode illustrates the basics of using the TensorFlow Object Detection API to
- * determine the position of the gold and silver minerals.
- *
- * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.
- * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list.
- *
- * IMPORTANT: In order to use this OpMode, you need to obtain your own Vuforia license key as
- * is explained below.
- */
-@TeleOp(name = "Concept: TensorFlow Object Detection", group = "Concept")
-@Disabled
+
 public class TensorFlowDetection extends LinearOpMode {
+
+    public String goldMineralPosition;
+
     private static final String TFOD_MODEL_ASSET = "RoverRuckus.tflite";
     private static final String LABEL_GOLD_MINERAL = "Gold Mineral";
     private static final String LABEL_SILVER_MINERAL = "Silver Mineral";
@@ -70,7 +62,7 @@ public class TensorFlowDetection extends LinearOpMode {
      * Once you've obtained a license key, copy the string from the Vuforia web site
      * and paste it in to your code on the next line, between the double quotes.
      */
-    private static final String VUFORIA_KEY = " -- YOUR NEW VUFORIA KEY GOES HERE  --- ";
+    private static final String VUFORIA_KEY = "AdYuMaf/////AAABmQyNFW836U3Bm+J+hVigvkkGeAm7fQMr/ebjt3CGn0YAWJGVEivam6/4b0DXxsK42rhUje3pEAVXqGQYbGRKzg+RvfzeFmKDXmynMDHTzf0Qp7eRde0CjE7ffQx7+L/PAiR34VjDBs5A2c+D1DabGllss4bQ1F1henR4PZDiCkXaCvezO5qXg9OIII28gHIgLAXfgbHVuhiKRsMiKtGoMTQm/FmbZRNYz7csT+kJQSDQaehWqlDioV8VQjIjdFg2PB6LI7eHFYz/SFpqI2jgFdpivVND82pNZ4oB6/8c0/UiVcshaPUIfFWQA0pIX/vUVwYakIiicCT1iWjECfrveXvDy73aVTDyqek0hatnaSpo";
 
     /**
      * {@link #vuforia} is the variable we will use to store our instance of the Vuforia
@@ -84,7 +76,6 @@ public class TensorFlowDetection extends LinearOpMode {
      */
     private TFObjectDetector tfod;
 
-    @Override
     public void runOpMode() {
         // The TFObjectDetector uses the camera frames from the VuforiaLocalizer, so we create that
         // first.
@@ -92,28 +83,17 @@ public class TensorFlowDetection extends LinearOpMode {
 
         if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
             initTfod();
-        } else {
-            telemetry.addData("Sorry!", "This device is not compatible with TFOD");
         }
 
-        /** Wait for the game to begin */
-        telemetry.addData(">", "Press Play to start tracking");
-        telemetry.update();
-        waitForStart();
-
-        if (opModeIsActive()) {
-            /** Activate Tensor Flow Object Detection. */
-            if (tfod != null) {
+        if (tfod != null) {
                 tfod.activate();
             }
 
-            while (opModeIsActive()) {
-                if (tfod != null) {
-                    // getUpdatedRecognitions() will return null if no new information is available since
-                    // the last time that call was made.
-                    List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
+        if (tfod != null) {
+            // getUpdatedRecognitions() will return null if no new information is available since
+            // the last time that call was made.
+            List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
                     if (updatedRecognitions != null) {
-                      telemetry.addData("# Object Detected", updatedRecognitions.size());
                       if (updatedRecognitions.size() == 3) {
                         int goldMineralX = -1;
                         int silverMineral1X = -1;
@@ -129,19 +109,21 @@ public class TensorFlowDetection extends LinearOpMode {
                         }
                         if (goldMineralX != -1 && silverMineral1X != -1 && silverMineral2X != -1) {
                           if (goldMineralX < silverMineral1X && goldMineralX < silverMineral2X) {
-                            telemetry.addData("Gold Mineral Position", "Left");
+                            goldMineralPosition="Left";
+
                           } else if (goldMineralX > silverMineral1X && goldMineralX > silverMineral2X) {
-                            telemetry.addData("Gold Mineral Position", "Right");
+                            goldMineralPosition="Right";
                           } else {
-                            telemetry.addData("Gold Mineral Position", "Center");
+                            goldMineralPosition="Center";
                           }
                         }
                       }
-                      telemetry.update();
                     }
                 }
-            }
-        }
+
+        Auto.runAuto();
+
+
 
         if (tfod != null) {
             tfod.shutdown();

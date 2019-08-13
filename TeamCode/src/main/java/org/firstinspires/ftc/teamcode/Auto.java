@@ -10,10 +10,13 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 @Autonomous(name="Auto", group="Pushbot")
 
-public class Auto extends LinearOpMode {
+public class Auto extends TensorFlowDetection {
 
     /* Declare OpMode members. */
     private ElapsedTime runtime = new ElapsedTime();
+    private ElapsedTime sensing = new ElapsedTime();
+    private TensorFlowDetection ourSensor=new TensorFlowDetection();
+
 
 
     static final double COUNTS_PER_MOTOR_REV = 1120;    // eg: AndyMark 40 Motor Encoder
@@ -25,10 +28,8 @@ public class Auto extends LinearOpMode {
 
     public DcMotor leftDrive = null;
     public DcMotor rightDrive = null;
-
-    @Override
-    public void runOpMode() {
-
+    public void runAuto() {
+        ourSensor.runOpMode();
         telemetry.addData("Status", "Resetting Encoders");    //
         telemetry.update();
 
@@ -52,10 +53,25 @@ public class Auto extends LinearOpMode {
 
         waitForStart();
 
-        encoderDrive(.6,12, 12, 15);
-        encoderDrive(.6,-12, -12, 15);
-        encoderDrive(.6,8, -8, 15);
-        encoderDrive(.6,12, 12, 15);
+        ourSensor.startVision();
+
+
+        sensing.reset();
+        while (sensing.time()<4) {
+
+            if (ourSensor.goldMineralPosition == "left") {
+                encoderDrive(.6, 0, 12, 15);
+
+            } else if (ourSensor.goldMineralPosition == "center") {
+                encoderDrive(.6, 12, 12, 15);
+            } else {
+                encoderDrive(.6, 12, 0, 15);
+            }
+
+        }
+
+
+
 
 
 
