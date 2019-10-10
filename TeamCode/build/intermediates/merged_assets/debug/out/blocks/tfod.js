@@ -1,5 +1,5 @@
 /**
- * @fileoverview Functions to generate code for the initialize method call for Tensor Flow Object Detection
+ * @fileoverview Functions to generate code for the initialize method call for TensorFlow Object Detection
  * @author lizlooney@google.com (Liz Looney)
  */
 
@@ -22,6 +22,11 @@ function tfod_initialize_FtcJava(block, className, vuforiaClassName) {
   var vuforiaIdentifier = Blockly.FtcJava.importDeclareAssign_(block, null, vuforiaClassName);
   var minimumConfidence = Blockly.FtcJava.valueToCode(
       block, 'MINIMUM_CONFIDENCE', Blockly.FtcJava.ORDER_COMMA);
+  if (isNaN(minimumConfidence)) {
+    minimumConfidence = '(float) (' + minimumConfidence + ')';
+  } else {
+    minimumConfidence = minimumConfidence + 'F';
+  }
   var useObjectTracker = Blockly.FtcJava.valueToCode(
       block, 'USE_OBJECT_TRACKER', Blockly.FtcJava.ORDER_COMMA);
   var enableCameraMonitoring = Blockly.FtcJava.valueToCode(

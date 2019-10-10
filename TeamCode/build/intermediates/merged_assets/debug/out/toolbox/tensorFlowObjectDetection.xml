@@ -1,4 +1,4 @@
-<category name="Tensor Flow Object Detection">
+<category name="TensorFlow Object Detection">
   <category name="Optimized for Rover Ruckus">
     <block type="tfodRoverRuckus_initialize">
       <value name="MINIMUM_CONFIDENCE"><shadow type="math_number"><field name="NUM">0.4</field></shadow></value>
@@ -8,6 +8,12 @@
     <block type="tfodRoverRuckus_activate">
     </block>
     <block type="tfodRoverRuckus_deactivate">
+    </block>
+    <block type="tfodRoverRuckus_setClippingMargins">
+      <value name="LEFT"><shadow type="math_number"><field name="NUM">0</field></shadow></value>
+      <value name="TOP"><shadow type="math_number"><field name="NUM">200</field></shadow></value>
+      <value name="RIGHT"><shadow type="math_number"><field name="NUM">0</field></shadow></value>
+      <value name="BOTTOM"><shadow type="math_number"><field name="NUM">0</field></shadow></value>
     </block>
     <block type="tfodRoverRuckus_getRecognitions">
     </block>

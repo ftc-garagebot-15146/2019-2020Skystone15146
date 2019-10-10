@@ -610,6 +610,9 @@ Blockly.FtcJava.checkTypes_ = function(type, expectedType) {
 
     case 'MatrixF':
       return type == 'MatrixF' || type == 'OpenGLMatrix';
+
+    case 'List':
+      return type.match(/^List<(.*)>$/) ? true : false;
   }
   return false;
 };
@@ -760,6 +763,14 @@ Blockly.FtcJava.getTypeValue_ = function(type) {
       return 10;
     case 'OpenGLMatrix':
       return 11;
+
+    case 'Array':
+    case 'List':
+      return 12;
+    default:
+      if (type.match(/^List<(.*)>$/)) {
+        return 13;
+      }
   }
   return 100;
 };
@@ -796,6 +807,27 @@ Blockly.FtcJava.getFunctionName_ = function(block) {
   }
   return Blockly.FtcJava.variableDB_.getName(block.getFieldValue('NAME'), Blockly.Procedures.NAME_TYPE);
 };
+
+/**
+ * Generate code for the specified block (and attached blocks). If an exception occurs, generate a comment.
+ * @param {Blockly.Block} block The block to generate code for.
+ * @return {string|!Array} For statement blocks, the generated code.
+ *     For value blocks, an array containing the generated code and an
+ *     operator order value.  Returns '' if block is null.
+ */
+Blockly.FtcJava.blockToCode = function(block) {
+  try {
+    return Blockly.Generator.prototype.blockToCode.call(this, block);
+  } catch (e) {
+    console.log('Sorry, FTC Blocks-to-Java has a bug! Unable to generate code for ' + block.type + '.');
+    var errorCode = '/* Sorry, FTC Blocks-to-Java has a bug! Unable to generate code for ' + block.type + '. */';
+    var jsCode = Blockly.JavaScript.blockToCode(block);
+    if (Array.isArray(jsCode)) {
+      return [errorCode, Blockly.FtcJava.ORDER_ATOMIC];
+    }
+    return errorCode;
+  }
+}
 
 /**
  * Prepend the generated code with the variable definitions.
@@ -1032,7 +1064,7 @@ Blockly.FtcJava.getClassNameForFtcJava_ = function() {
 Blockly.FtcJava.getClassAnnotationsForFtcJava_ = function() {
   var annotations = '';
   var flavor;
-  var flavorSelect = document.getElementById('flavor');
+  var flavorSelect = document.getElementById('project_flavor');
   if (flavorSelect) {
     flavor = flavorSelect.options[flavorSelect.selectedIndex].value;
   } else {
@@ -1048,7 +1080,7 @@ Blockly.FtcJava.getClassAnnotationsForFtcJava_ = function() {
   annotations += 'name = "' + Blockly.FtcJava.getOpModeNameForFtcJava_() + '"';
 
   var group;
-  var groupTextInput = document.getElementById('group');
+  var groupTextInput = document.getElementById('project_group');
   if (groupTextInput) {
     group = groupTextInput.value;
   } else {
@@ -1213,6 +1245,14 @@ Blockly.FtcJava.generateImport_ = function(type) {
     case 'TfodBase':
     case 'TfodRoverRuckus':
       importCode = 'import org.firstinspires.ftc.robotcore.external.tfod.' + type + ';';
+      break;
+    default:
+      var matches = type.match(/^List<(.*)>$/);
+      if (matches) {
+        Blockly.FtcJava.generateImport_('List');
+        Blockly.FtcJava.generateImport_(matches[1]);
+        return true;
+      }
   }
   if (importCode) {
     Blockly.FtcJava.definitions_['import_' + type] = importCode;

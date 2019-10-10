@@ -1,5 +1,5 @@
 /**
- * @fileoverview FTC robot blocks related to Tensor Flow Object Detection for Rover Ruckus (2018-2019)
+ * @fileoverview FTC robot blocks related to TensorFlow Object Detection for Rover Ruckus (2018-2019)
  * @author lizlooney@google.com (Liz Looney)
  */
 
@@ -32,7 +32,7 @@ Blockly.Blocks['tfodRoverRuckus_initialize'] = {
     this.setPreviousStatement(true);
     this.setNextStatement(true);
     this.setColour(functionColor);
-    this.setTooltip('Initialize Tensor Flow Object Detection for Rover Ruckus.');
+    this.setTooltip('Initialize TensorFlow Object Detection for Rover Ruckus.');
     this.getFtcJavaInputType = function(inputName) {
       switch (inputName) {
         case 'MINIMUM_CONFIDENCE':
@@ -97,6 +97,63 @@ Blockly.FtcJava['tfodRoverRuckus_deactivate'] = function(block) {
   return identifier + '.deactivate();\n';
 };
 
+Blockly.Blocks['tfodRoverRuckus_setClippingMargins'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField('call')
+        .appendField(createNonEditableField('TensorFlowObjectDetection'))
+        .appendField('.')
+        .appendField(createNonEditableField('setClippingMargins'));
+    this.appendValueInput('LEFT').setCheck('Number')
+        .appendField('left')
+        .setAlign(Blockly.ALIGN_RIGHT);
+    this.appendValueInput('TOP').setCheck('Number')
+        .appendField('top')
+        .setAlign(Blockly.ALIGN_RIGHT);
+    this.appendValueInput('RIGHT').setCheck('Number')
+        .appendField('right')
+        .setAlign(Blockly.ALIGN_RIGHT);
+    this.appendValueInput('BOTTOM').setCheck('Number')
+        .appendField('bottom')
+        .setAlign(Blockly.ALIGN_RIGHT);
+    this.setPreviousStatement(true);
+    this.setNextStatement(true);
+    this.setColour(functionColor);
+    this.setTooltip('Sets the number of pixels to obscure on the left, top, right, and bottom ' +
+        'edges of each image passed to the TensorFlow object detector. The size of the images ' +
+        'are not changed, but the pixels in the margins are colored black.');
+    this.getFtcJavaInputType = function(inputName) {
+      switch (inputName) {
+        case 'LEFT':
+        case 'TOP':
+        case 'BOTTOM':
+        case 'RIGHT':
+          return 'int';
+      }
+      return '';
+    };
+  }
+};
+
+Blockly.JavaScript['tfodRoverRuckus_setClippingMargins'] = function(block) {
+  var left = Blockly.JavaScript.valueToCode(block, 'LEFT', Blockly.JavaScript.ORDER_COMMA);
+  var top = Blockly.JavaScript.valueToCode(block, 'TOP', Blockly.JavaScript.ORDER_COMMA);
+  var right = Blockly.JavaScript.valueToCode(block, 'RIGHT', Blockly.JavaScript.ORDER_COMMA);
+  var bottom = Blockly.JavaScript.valueToCode(block, 'BOTTOM', Blockly.JavaScript.ORDER_COMMA);
+  return tfodRoverRuckusIdentifierForJavaScript + '.setClippingMargins(' +
+      left + ', ' + top + ', ' + right + ', ' + bottom + ');\n';
+};
+
+Blockly.FtcJava['tfodRoverRuckus_setClippingMargins'] = function(block) {
+  var identifier = Blockly.FtcJava.importDeclareAssign_(block, null, 'TfodRoverRuckus');
+  var left = Blockly.FtcJava.valueToCode(block, 'LEFT', Blockly.FtcJava.ORDER_COMMA);
+  var top = Blockly.FtcJava.valueToCode(block, 'TOP', Blockly.FtcJava.ORDER_COMMA);
+  var right = Blockly.FtcJava.valueToCode(block, 'RIGHT', Blockly.FtcJava.ORDER_COMMA);
+  var bottom = Blockly.FtcJava.valueToCode(block, 'BOTTOM', Blockly.FtcJava.ORDER_COMMA);
+  return identifier + '.setClippingMargins(' +
+      left + ', ' + top + ', ' + right + ', ' + bottom + ');\n';
+};
+
 Blockly.Blocks['tfodRoverRuckus_getRecognitions'] = {
   init: function() {
     this.setOutput(true, 'Array');
@@ -107,6 +164,9 @@ Blockly.Blocks['tfodRoverRuckus_getRecognitions'] = {
         .appendField(createNonEditableField('getRecognitions'));
     this.setColour(functionColor);
     this.setTooltip('Returns a List of the current recognitions.');
+    this.getFtcJavaOutputType = function() {
+      return 'List<Recognition>';
+    };
   }
 };
 
