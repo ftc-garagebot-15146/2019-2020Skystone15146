@@ -1,0 +1,14 @@
+<component name="libraryTable">
+  <library name="Gradle: org.openftc:easyopencv:1.1@aar">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/b95d7cc5042a7af49dea5b1085f9261c/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/b95d7cc5042a7af49dea5b1085f9261c/res" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.openftc/easyopencv/1.1/16d8392f3d5e6981f8ca7b739003de54e65791ea/easyopencv-1.1-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.openftc/easyopencv/1.1/94cf9b6008367b71dcfe81e74d31049c382a332/easyopencv-1.1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
